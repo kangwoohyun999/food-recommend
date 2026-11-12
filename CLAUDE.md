@@ -11,9 +11,10 @@
 ## 작업 흐름 (Git)
 
 - `main`에 직접 커밋하지 않는다. 작업마다 브랜치를 만든다 (예: `feat/03-recommend-rule`).
-- 작업이 끝나고 typecheck·lint·test가 통과하면 **묻지 말고** 커밋 → push → `gh pr create`로 PR을 만든다.
+- 작업이 끝나고 typecheck·lint·test가 통과하면 **묻지 말고** 끝까지 진행한다:
+  커밋 → push → `gh pr create` → CI 통과 확인(`gh pr checks --watch`) → `gh pr merge --merge --delete-branch` → 로컬 `main` 최신화.
+- CI가 실패하면 머지하지 않고 원인을 고쳐서 다시 올린다.
 - PR 본문에는 무엇을 했는지, 어떻게 확인했는지, 관련 티켓 번호(기획 8장)를 적는다.
-- 아직 머지되지 않은 PR 위에 이어서 작업하면 그 브랜치를 base로 PR을 만든다.
 
 ## 명령어
 
