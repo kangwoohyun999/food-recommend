@@ -15,8 +15,11 @@ Node.js 24 이상이 필요하다.
 ```bash
 npm install
 cp .env.example .env.local   # Supabase 값 채우기
+npm run db:seed              # 메뉴 데이터 넣기 (처음 한 번)
 npm run dev                  # http://localhost:3000
 ```
+
+Supabase 프로젝트 만들기와 Vercel 배포는 [docs/setup.md](docs/setup.md)를 본다.
 
 ## 검사
 

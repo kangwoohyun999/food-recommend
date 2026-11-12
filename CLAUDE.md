@@ -20,3 +20,9 @@
 
 - `npm run dev` — 개발 서버
 - `npm run typecheck` / `npm run lint` / `npm test` — CI와 같은 검사
+- `npm run db:seed` — `src/lib/menu/menu-data.ts`를 Supabase `menus` 테이블에 upsert (secret key 필요)
+
+## 데이터
+
+- 테이블 구조: `supabase/migrations/` (바꿀 때는 새 파일 추가). 태그 check 제약은 `src/lib/menu/conditions.ts`와 맞춘다.
+- 연동 절차: `docs/setup.md`
