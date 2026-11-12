@@ -1,25 +1,34 @@
 "use client";
 
 import { useState } from "react";
-import type { ConditionKey, Selection } from "@/lib/menu/conditions";
-import { chosenKeys, describeCondition, questionKeys, toggleOption } from "@/lib/menu/selection";
+import type { ConditionKey, Menu, Selection } from "@/lib/menu/conditions";
+import { filterMenus, recommend } from "@/lib/menu/recommend";
+import { questionKeys, removeCondition, toggleOption } from "@/lib/menu/selection";
+import { CandidateList } from "./candidate-list";
 import { ConditionSetup } from "./condition-setup";
+import { PickedMenu } from "./picked-menu";
 import { QuestionStep } from "./question-step";
 
 type State =
   | { step: "setup" }
   | { step: "questions"; keys: ConditionKey[]; index: number }
-  | { step: "result" };
+  | { step: "result"; candidates: Menu[] }
+  | { step: "picked"; candidates: Menu[]; menu: Menu };
 
 /** 조건 설정 → 질문 → 후보 흐름을 관리한다 (기획서 4.1). */
-export function MenuFinder() {
+export function MenuFinder({ menus }: { menus: Menu[] }) {
   const [state, setState] = useState<State>({ step: "setup" });
   /** 메인 화면에서 미리 고른 조건과 질문에서 고른 조건을 모두 담는다 */
   const [selection, setSelection] = useState<Selection>({});
 
+  function showResult(next: Selection = selection) {
+    setState({ step: "result", candidates: recommend(menus, next) });
+  }
+
   function start() {
     const keys = questionKeys(selection);
-    setState(keys.length === 0 ? { step: "result" } : { step: "questions", keys, index: 0 });
+    if (keys.length === 0) showResult();
+    else setState({ step: "questions", keys, index: 0 });
   }
 
   function restart() {
@@ -27,42 +36,54 @@ export function MenuFinder() {
     setState({ step: "setup" });
   }
 
-  if (state.step === "setup") {
-    return <ConditionSetup preset={selection} onChange={setSelection} onStart={start} />;
-  }
+  switch (state.step) {
+    case "setup":
+      return <ConditionSetup preset={selection} onChange={setSelection} onStart={start} />;
 
-  if (state.step === "questions") {
-    const { keys, index } = state;
-    const key = keys[index];
-    return (
-      <QuestionStep
-        key={key}
-        conditionKey={key}
-        index={index}
-        total={keys.length}
-        selected={selection[key] ?? []}
-        onToggle={(option) => setSelection((s) => toggleOption(s, key, option))}
-        onNext={() =>
-          setState(index + 1 < keys.length ? { ...state, index: index + 1 } : { step: "result" })
-        }
-        onBack={() => setState(index === 0 ? { step: "setup" } : { ...state, index: index - 1 })}
-        onFinish={() => setState({ step: "result" })}
-      />
-    );
-  }
+    case "questions": {
+      const { keys, index } = state;
+      const key = keys[index];
+      return (
+        <QuestionStep
+          key={key}
+          conditionKey={key}
+          index={index}
+          total={keys.length}
+          selected={selection[key] ?? []}
+          onToggle={(option) => setSelection((s) => toggleOption(s, key, option))}
+          onNext={() =>
+            index + 1 < keys.length ? setState({ ...state, index: index + 1 }) : showResult()
+          }
+          onBack={() => setState(index === 0 ? { step: "setup" } : { ...state, index: index - 1 })}
+          onFinish={() => showResult()}
+        />
+      );
+    }
 
-  // 티켓 06에서 후보 3개 화면으로 바꾼다
-  const chosen = chosenKeys(selection);
-  return (
-    <div className="flex flex-col items-center gap-4 py-16 text-center">
-      <p className="font-bold">고른 조건</p>
-      <ul className="text-muted">
-        {chosen.length === 0 ? <li>조건 없음</li> : chosen.map((k) => <li key={k}>{describeCondition(selection, k)}</li>)}
-      </ul>
-      <p className="text-muted">후보 화면은 준비 중이에요.</p>
-      <button type="button" onClick={restart} className="text-accent underline">
-        처음으로
-      </button>
-    </div>
-  );
+    case "result":
+      return (
+        <CandidateList
+          selection={selection}
+          candidates={state.candidates}
+          matchCount={filterMenus(menus, selection).length}
+          onPick={(menu) => setState({ step: "picked", candidates: state.candidates, menu })}
+          onReroll={() => showResult()}
+          onRemoveCondition={(key) => {
+            const next = removeCondition(selection, key);
+            setSelection(next);
+            showResult(next);
+          }}
+          onRestart={restart}
+        />
+      );
+
+    case "picked":
+      return (
+        <PickedMenu
+          menu={state.menu}
+          onBack={() => setState({ step: "result", candidates: state.candidates })}
+          onRestart={restart}
+        />
+      );
+  }
 }
