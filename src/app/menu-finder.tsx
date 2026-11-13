@@ -6,28 +6,30 @@ import { filterMenus, recommend } from "@/lib/menu/recommend";
 import { questionKeys, removeCondition, toggleOption } from "@/lib/menu/selection";
 import { CandidateList } from "./candidate-list";
 import { ConditionSetup } from "./condition-setup";
+import { Intro } from "./intro";
 import { PickedMenu } from "./picked-menu";
 import { QuestionStep } from "./question-step";
 import { Roulette } from "./roulette";
 
 type State =
+  | { step: "intro" }
   | { step: "setup" }
   | { step: "roulette" }
   | { step: "questions"; keys: ConditionKey[]; index: number }
   | { step: "result"; candidates: Menu[] }
   | { step: "picked"; candidates: Menu[]; menu: Menu };
 
-/** 조건 설정 → 질문 → 후보 흐름을 관리한다 (기획서 4.1). */
+/** 첫 화면 → 조건 미리 고르기 → 질문 → 후보 흐름을 관리한다 (기획서 4.1). */
 export function MenuFinder({ menus }: { menus: Menu[] }) {
-  const [state, setState] = useState<State>({ step: "setup" });
-  /** 메인 화면에서 미리 고른 조건과 질문에서 고른 조건을 모두 담는다 */
+  const [state, setState] = useState<State>({ step: "intro" });
+  /** 미리 고른 조건과 질문에서 고른 조건을 모두 담는다 */
   const [selection, setSelection] = useState<Selection>({});
 
   function showResult(next: Selection = selection) {
     setState({ step: "result", candidates: recommend(menus, next) });
   }
 
-  function start() {
+  function startQuestions() {
     const keys = questionKeys(selection);
     if (keys.length === 0) showResult();
     else setState({ step: "questions", keys, index: 0 });
@@ -35,17 +37,25 @@ export function MenuFinder({ menus }: { menus: Menu[] }) {
 
   function restart() {
     setSelection({});
-    setState({ step: "setup" });
+    setState({ step: "intro" });
   }
 
   switch (state.step) {
+    case "intro":
+      return (
+        <Intro
+          onStart={() => setState({ step: "setup" })}
+          onRoulette={() => setState({ step: "roulette" })}
+        />
+      );
+
     case "setup":
       return (
         <ConditionSetup
           preset={selection}
           onChange={setSelection}
-          onStart={start}
-          onRoulette={() => setState({ step: "roulette" })}
+          onNext={startQuestions}
+          onBack={restart}
         />
       );
 

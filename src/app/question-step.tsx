@@ -40,7 +40,7 @@ export function QuestionStep({
         <button
           type="button"
           onClick={onBack}
-          aria-label={index === 0 ? "처음 화면으로" : "이전 질문"}
+          aria-label={index === 0 ? "조건 미리 고르기로" : "이전 질문"}
           className="-ml-2 rounded-full px-2 py-1 text-xl text-muted hover:text-foreground"
         >
           ←

@@ -57,7 +57,7 @@ export function CandidateList({
                 onClick={onReroll}
                 className="h-12 w-full rounded-2xl border border-border bg-surface font-bold hover:border-accent"
               >
-                🔄 다른 후보 보기
+                다른 후보 보기
               </button>
             )}
             <p className="text-sm text-muted">조건에 맞는 메뉴 {matchCount}개 중에서 골랐어요.</p>
