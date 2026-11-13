@@ -20,7 +20,8 @@
 
 - `npm run dev` — 개발 서버
 - `npm run typecheck` / `npm run lint` / `npm test` — CI와 같은 검사
-- `npm run db:seed` — `src/lib/menu/menu-data.ts`를 Supabase `menus` 테이블에 upsert (secret key 필요)
+- `npm run db:seed` — `src/lib/menu/menu-data.ts`를 Supabase `menus` 테이블에 upsert (secret key 필요). 태그를 고치면 머지 전에 실행해야 배포 빌드에 반영된다.
+- `npm run menu:table` — 전체 메뉴와 태그를 한글 표로 출력 (검수용)
 
 ## 데이터
 
