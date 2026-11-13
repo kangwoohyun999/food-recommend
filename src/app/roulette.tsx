@@ -13,12 +13,16 @@ function newSpin(menus: readonly Menu[]): Spin {
 }
 
 type Props = {
+  /** 룰렛에 올릴 메뉴. 조건 없이 돌리면 전체, 후보 화면에서 돌리면 조건에 맞는 메뉴 */
   menus: readonly Menu[];
+  /** 룰렛 위에 보여 줄 설명 (예: "조건에 맞는 메뉴 25개 중에서") */
+  caption?: string;
+  exitLabel: string;
   onExit: () => void;
 };
 
-/** 조건 없이 전체 메뉴에서 하나를 뽑는 룰렛 (기획서 4.3) */
-export function Roulette({ menus, onExit }: Props) {
+/** 메뉴 중 하나를 랜덤으로 정하는 룰렛 (기획서 4.3) */
+export function Roulette({ menus, caption, exitLabel, onExit }: Props) {
   const [spin, setSpin] = useState<Spin>(() => newSpin(menus));
   const { sequence, index } = spin;
   const done = index >= sequence.length - 1;
@@ -39,9 +43,12 @@ export function Roulette({ menus, onExit }: Props) {
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-10 py-10 text-center">
-      <p className="font-medium text-muted" aria-hidden={!done}>
-        {done ? "오늘의 메뉴는" : "두구두구두구…"}
-      </p>
+      <div className="flex flex-col gap-1">
+        {caption && <p className="text-sm text-muted">{caption}</p>}
+        <p className="font-medium text-muted" aria-hidden={!done}>
+          {done ? "오늘의 메뉴는" : "두구두구두구…"}
+        </p>
+      </div>
 
       <div
         className={`flex h-40 w-full items-center justify-center overflow-hidden rounded-3xl border-2 bg-surface transition-colors duration-300 ${
@@ -76,7 +83,7 @@ export function Roulette({ menus, onExit }: Props) {
           disabled={!done}
           className="h-12 w-full rounded-2xl border border-border bg-surface font-bold hover:border-accent"
         >
-          조건 골라서 추천 받기
+          {exitLabel}
         </button>
       </div>
     </div>
