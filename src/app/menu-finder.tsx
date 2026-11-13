@@ -8,9 +8,11 @@ import { CandidateList } from "./candidate-list";
 import { ConditionSetup } from "./condition-setup";
 import { PickedMenu } from "./picked-menu";
 import { QuestionStep } from "./question-step";
+import { Roulette } from "./roulette";
 
 type State =
   | { step: "setup" }
+  | { step: "roulette" }
   | { step: "questions"; keys: ConditionKey[]; index: number }
   | { step: "result"; candidates: Menu[] }
   | { step: "picked"; candidates: Menu[]; menu: Menu };
@@ -38,7 +40,17 @@ export function MenuFinder({ menus }: { menus: Menu[] }) {
 
   switch (state.step) {
     case "setup":
-      return <ConditionSetup preset={selection} onChange={setSelection} onStart={start} />;
+      return (
+        <ConditionSetup
+          preset={selection}
+          onChange={setSelection}
+          onStart={start}
+          onRoulette={() => setState({ step: "roulette" })}
+        />
+      );
+
+    case "roulette":
+      return <Roulette menus={menus} onExit={restart} />;
 
     case "questions": {
       const { keys, index } = state;
