@@ -93,7 +93,7 @@ export function QuestionStep({
           <button
             type="button"
             onClick={onFinish}
-            className="h-14 w-full rounded-2xl bg-accent text-lg font-bold text-accent-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="h-14 w-full rounded-2xl bg-accent-soft text-lg font-bold text-accent-soft-foreground hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             남은 질문 건너뛰고 바로 추천 받기
           </button>

@@ -8,6 +8,7 @@
   --border: #e7e5e4;
   --accent: #ea580c;
   --accent-soft: #ffedd5;
+  --accent-soft-foreground: #9a3412;
   --accent-foreground: #ffffff;
 }
 
@@ -20,6 +21,7 @@
     --border: #3a3330;
     --accent: #fb923c;
     --accent-soft: #3b2416;
+    --accent-soft-foreground: #fed7aa;
     --accent-foreground: #1c1917;
   }
 }
@@ -32,6 +34,7 @@
   --color-border: var(--border);
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
+  --color-accent-soft-foreground: var(--accent-soft-foreground);
   --color-accent-foreground: var(--accent-foreground);
   --font-sans: var(--font-noto-sans-kr), system-ui, sans-serif;
 }
