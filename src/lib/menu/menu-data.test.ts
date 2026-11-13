@@ -33,6 +33,32 @@ describe("메뉴 데이터", () => {
     }
   });
 
+  describe("태그끼리 모순되지 않는다", () => {
+    const has = (tags: readonly string[], value: string) => tags.includes(value);
+    const conflicts: [string, (t: (typeof MENU_DATA)[number]["tags"]) => boolean][] = [
+      ["몸이 안 좋음(순함)인데 매운 맛", (t) => has(t.condition, "sick") && has(t.taste, "spicy")],
+      ["스트레스(자극적)인데 담백한 맛", (t) => has(t.condition, "stressed") && has(t.taste, "mild")],
+      ["매운 맛과 담백한 맛을 함께", (t) => has(t.taste, "spicy") && has(t.taste, "mild")],
+      [
+        "더운 날과 추운·비 오는 날을 함께",
+        (t) => has(t.weather, "hot") && (has(t.weather, "cold") || has(t.weather, "rainy")),
+      ],
+      ["혼밥인데 2만원 이상", (t) => has(t.situation, "solo") && has(t.price, "over20k")],
+    ];
+    for (const [rule, isConflict] of conflicts) {
+      it(rule, () => {
+        expect(MENU_DATA.filter((m) => isConflict(m.tags)).map((m) => m.name)).toEqual([]);
+      });
+    }
+  });
+
+  it("시간대와 인원·상황은 하나 이상 있다", () => {
+    const missing = MENU_DATA.filter(
+      (m) => m.tags.mealTime.length === 0 || m.tags.situation.length === 0,
+    ).map((m) => m.name);
+    expect(missing).toEqual([]);
+  });
+
   const menusWithId = MENU_DATA.map((m) => ({ ...m, id: m.name }));
 
   for (const key of CONDITION_KEYS) {
