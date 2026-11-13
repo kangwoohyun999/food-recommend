@@ -68,7 +68,7 @@ export function Roulette({ menus, onExit }: Props) {
           disabled={!done}
           className="h-14 w-full rounded-2xl bg-accent text-lg font-bold text-accent-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
-          🎰 다시 돌리기
+          다시 돌리기
         </button>
         <button
           type="button"

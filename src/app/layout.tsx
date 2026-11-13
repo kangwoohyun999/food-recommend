@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 
@@ -9,9 +9,27 @@ const notoSansKr = Noto_Sans_KR({
   preload: false,
 });
 
+const DESCRIPTION = "컨디션·날씨·상황을 고르면 오늘의 메뉴를 추천해 주는 서비스";
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://today-food-recommend.vercel.app"),
   title: "오늘 뭐 먹지",
-  description: "컨디션·날씨·상황을 고르면 오늘의 메뉴를 추천해 주는 서비스",
+  description: DESCRIPTION,
+  openGraph: {
+    title: "오늘 뭐 먹지?",
+    description: DESCRIPTION,
+    siteName: "오늘 뭐 먹지",
+    locale: "ko_KR",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image" },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fffaf5" },
+    { media: "(prefers-color-scheme: dark)", color: "#141110" },
+  ],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
