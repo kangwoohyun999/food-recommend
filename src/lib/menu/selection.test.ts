@@ -1,11 +1,6 @@
 import { describe, expect, it } from "vitest";
-import {
-  chosenKeys,
-  describeCondition,
-  questionKeys,
-  removeCondition,
-  toggleOption,
-} from "./selection";
+import { CONDITION_KEYS } from "./conditions";
+import { chosenKeys, describeCondition, removeCondition, toggleOption } from "./selection";
 
 describe("toggleOption", () => {
   it("선택지를 켜고 다시 누르면 끈다", () => {
@@ -26,9 +21,9 @@ describe("toggleOption", () => {
   });
 });
 
-describe("questionKeys", () => {
-  it("아무것도 안 골랐으면 7개 조건을 질문 순서대로 모두 묻는다", () => {
-    expect(questionKeys({})).toEqual([
+describe("질문 순서", () => {
+  it("7개 조건을 정해진 순서대로 묻는다", () => {
+    expect(CONDITION_KEYS).toEqual([
       "condition",
       "mealTime",
       "situation",
@@ -37,20 +32,6 @@ describe("questionKeys", () => {
       "taste",
       "price",
     ]);
-  });
-
-  it("미리 고른 조건은 건너뛴다", () => {
-    expect(questionKeys({ condition: ["hangover"], price: ["under10k"] })).toEqual([
-      "mealTime",
-      "situation",
-      "weather",
-      "cuisine",
-      "taste",
-    ]);
-  });
-
-  it("빈 배열은 고르지 않은 것으로 본다", () => {
-    expect(questionKeys({ condition: [] })).toContain("condition");
   });
 });
 

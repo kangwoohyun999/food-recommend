@@ -16,6 +16,8 @@ type Props = {
   matchCount: number;
   onPick: (menu: Menu) => void;
   onReroll: () => void;
+  /** 조건에 맞는 메뉴 전체로 룰렛을 돌린다 */
+  onRoulette: () => void;
   onRemoveCondition: (key: ConditionKey) => void;
   onRestart: () => void;
 };
@@ -27,6 +29,7 @@ export function CandidateList({
   matchCount,
   onPick,
   onReroll,
+  onRoulette,
   onRemoveCondition,
   onRestart,
 }: Props) {
@@ -55,9 +58,18 @@ export function CandidateList({
               <button
                 type="button"
                 onClick={onReroll}
-                className="h-12 w-full rounded-2xl border border-border bg-surface font-bold hover:border-accent"
+                className="h-12 w-full rounded-2xl bg-accent font-bold text-accent-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
                 다른 후보 보기
+              </button>
+            )}
+            {matchCount > 1 && (
+              <button
+                type="button"
+                onClick={onRoulette}
+                className="h-12 w-full rounded-2xl border border-border bg-surface font-bold hover:border-accent hover:bg-accent-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              >
+                조건에 맞게 랜덤으로 뽑기
               </button>
             )}
             <p className="text-sm text-muted">조건에 맞는 메뉴 {matchCount}개 중에서 골랐어요.</p>

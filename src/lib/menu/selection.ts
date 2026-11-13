@@ -35,11 +35,6 @@ export function chosenKeys(selection: Selection): ConditionKey[] {
   return CONDITION_KEYS.filter((key) => isChosen(selection, key));
 }
 
-/** 미리 고르지 않아서 질문으로 물어볼 조건 (질문 순서대로) */
-export function questionKeys(preset: Selection): ConditionKey[] {
-  return CONDITION_KEYS.filter((key) => !isChosen(preset, key));
-}
-
 /** "종류: 한식, 중식"처럼 화면에 보여 줄 문구 */
 export function describeCondition(selection: Selection, key: ConditionKey): string {
   const labels: Record<string, string> = CONDITIONS[key].options;

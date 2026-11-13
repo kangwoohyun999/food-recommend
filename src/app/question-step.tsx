@@ -29,10 +29,10 @@ export function QuestionStep({
   const primaryLabel = isLast
     ? hasAnswer
       ? "추천 받기"
-      : "상관없어요, 추천 받기"
+      : "이 질문 건너뛰고 추천 받기"
     : hasAnswer
       ? "다음"
-      : "상관없어요";
+      : "이 질문 건너뛰기";
 
   return (
     <div className="flex flex-1 flex-col gap-10">
@@ -40,7 +40,7 @@ export function QuestionStep({
         <button
           type="button"
           onClick={onBack}
-          aria-label={index === 0 ? "조건 미리 고르기로" : "이전 질문"}
+          aria-label={index === 0 ? "첫 화면으로" : "이전 질문"}
           className="-ml-2 rounded-full px-2 py-1 text-xl text-muted hover:text-foreground"
         >
           ←
@@ -93,7 +93,7 @@ export function QuestionStep({
           <button
             type="button"
             onClick={onFinish}
-            className="text-sm text-muted underline-offset-2 hover:underline"
+            className="h-14 w-full rounded-2xl bg-accent text-lg font-bold text-accent-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             남은 질문 건너뛰고 바로 추천 받기
           </button>
