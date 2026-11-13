@@ -6,10 +6,11 @@ type Props = {
   preset: Selection;
   onChange: (next: Selection) => void;
   onStart: () => void;
+  onRoulette: () => void;
 };
 
 /** 메인 화면: [시작] 버튼 위에서 조건을 미리 고른다 (기획서 4.1). 전부 선택 사항이다. */
-export function ConditionSetup({ preset, onChange, onStart }: Props) {
+export function ConditionSetup({ preset, onChange, onStart, onRoulette }: Props) {
   const chosenCount = chosenKeys(preset).length;
   const remaining = questionKeys(preset).length;
 
@@ -25,6 +26,13 @@ export function ConditionSetup({ preset, onChange, onStart }: Props) {
           <br />
           오늘의 메뉴를 정해 드릴게요.
         </p>
+        <button
+          type="button"
+          onClick={onRoulette}
+          className="mt-2 self-center rounded-full border border-border bg-surface px-5 py-2.5 text-sm font-bold hover:border-accent hover:bg-accent-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          🎰 조건 없이 랜덤으로 뽑기
+        </button>
       </header>
 
       <section
